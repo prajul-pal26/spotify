@@ -1,28 +1,13 @@
- {
-    "version":2,
-    "builds":[
+{
+    "builds": [{
+        "src": "spotify_music/wsgi.py",
+        "use": "@vercel/python",
+        "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" }
+    }],
+    "routes": [
         {
-            "src":"spotify_music/wsgi.py",
-            "use":"@vercel/python",
-            "config":{"maxLambdaSize":"15mb","runtime":"python3.12"}
-        },
-        {
-            "src":"build_files.sh",
-            "use":"@vercel/static-build",
-            "config":{
-                "disDir":"staticfiles_build"
-            }
-        }
-    ],
-    "routes":[
-        {
-            "src":"/static/(.*)",
-            "dest":"/static/$1"
-        },
-        {
-            "src":"/(.*)",
-            "dest":"spotify_music/wsgi.py"
+            "src": "/(.*)",
+            "dest": "spotify_music/wsgi.py"
         }
     ]
-
- }
+}

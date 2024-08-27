@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.contrib.auth.models import User,auth
 from django.contrib.auth.decorators import login_required
 import requests      # this check if any user loggin to the page or not 
-from music.utils import search_for_artist
 import base64
 import requests
 import json
@@ -41,17 +40,23 @@ def get_token():
 
 def get_auth_header(token):
     return {"Authorization":"Bearer "+token}
+def convert_milliseconds(milliseconds):
+    seconds = (milliseconds // 1000) % 60
+    minutes = (milliseconds // (1000 * 60)) % 60
+    
+    return f"{minutes}:{seconds:02d}"
 #-----------------------------------------------------search by track------------------------------
 def search(request):
     if request.method=="POST":
         search_query=request.POST['search_query']
-        
+        #----------------same search as top artist
         url=f"https://api.spotify.com/v1/search?q={search_query}&type=artist&limit=1"
         headers = get_auth_header(get_token())
         
         response = requests.get(url, headers=headers)
         data=response.json()
         id=data["artists"]['items'][0]['id'] 
+        #----------------top songs by artist
         songs_url=f"https://api.spotify.com/v1/artists/{id}/top-tracks?market=IN"
         headers2 = get_auth_header(get_token())
         
@@ -71,7 +76,7 @@ def search(request):
             track_list.append({
                 'track_name':track_name,
                 'artist_name':artist_name,
-                'duration':duration,
+                'duration':convert_milliseconds(int(duration)),
                 'trackid':trackid,
                 'track_image':track_image
             })
@@ -104,18 +109,15 @@ def top_artists():
     list_of_artist=["Arijit Singh","Shreya Ghoshal","Armaan Malik","Neha Kakkar","A. R. Rahman","Jubin Nautiyal"]
     details=[]
     for artist in list_of_artist:
-        url="https://api.spotify.com/v1/search"
+        url=f"https://api.spotify.com/v1/search?q={artist}&type=artist&limit=1"
         headers=get_auth_header(get_token())   
-        query=f"?q={artist}&type=artist&limit=1"
-        
-        query_url=url+query
-        result=requests.get(query_url,headers=headers)
+        result=requests.get(url,headers=headers)
         data=json.loads(result.content)
         
         image=data["artists"]['items'][0]['images'][0]['url']
         name=data["artists"]['items'][0]['name']
-        link=data["artists"]['items'][0]['id']      
-        details.append((name,image,link))
+        id=data["artists"]['items'][0]['id']      
+        details.append((name,image,id))
     return details
 #---------------------------------------top song -> music play---------------------------------------
 
@@ -136,7 +138,7 @@ def music(request,pk):
         track_image = data['album']['images'][1]['url']
         
         audio_url=data['preview_url']
-        duration_text=f"00:{str(int(data['duration_ms'])/360)[:2]}" 
+        duration_text=convert_milliseconds(int(data['duration_ms']))
         
         context = {
             'track_name': track_name,
@@ -148,7 +150,7 @@ def music(request,pk):
         return render(request, 'music.html', context)
 #song _id
 def top_songs():
-    #search by some category 
+    #top songs by category
     url=f"https://api.spotify.com/v1/playlists/37i9dQZF1DXdpQPPZq3F7n/tracks?limit=15"
 
     headers=get_auth_header(get_token())

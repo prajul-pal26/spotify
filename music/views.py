@@ -84,7 +84,7 @@ def search(request):
             'search_results_count':search_results_count,
             'track_list': track_list,
         }
-    return render(request,'search.html',context)
+        return render(request,'search.html',context)
 
 #-----------------------------------------------top artist -> their profile  --------------------------------------------
 def profile(request,pk):

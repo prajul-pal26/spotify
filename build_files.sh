@@ -1,4 +1,3 @@
-echo "BUILD START"
-
+echo " BUILD START"
 python3.12 manage.py collectstatic --noinput --clear
-echo "BUILD END"
+echo " BUILD END"

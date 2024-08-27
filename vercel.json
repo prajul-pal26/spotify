@@ -4,7 +4,7 @@
         {
             "src":"spotify_music/wsgi.py",
             "use":"@vercel/python",
-            "confi":{"maxLambdaSize":"15mb","runtime":"python3.12"}
+            "config":{"maxLambdaSize":"15mb","runtime":"python3.12"}
         },
         {
             "src":"build_files.sh",

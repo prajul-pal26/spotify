@@ -11,5 +11,4 @@ urlpatterns = [
     path('search',views.search,name="search"),
 
 
-    
 ]

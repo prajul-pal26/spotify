@@ -1,0 +1,15 @@
+{
+    "vscode-postgres.virtualFolders": [
+        
+        "functions"
+    ],
+    "terminal.integrated.environmentChangesIndicator": "on",
+    "terminal.integrated.environmentChangesRelaunch": true,
+    "python.createEnvironment.contentButton": "show",
+    "editor.defaultFormatter": "batisteo.vscode-django",
+    "terminal.integrated.env.windows": {
+
+    },
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "terminal.integrated.defaultProfile.windows": "Command Prompt"
+}

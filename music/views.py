@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
-from django.contrib.auth.models import User,auth
+from django.contrib.auth.models import User,auth 
 from django.contrib.auth.decorators import login_required
 import requests      # this check if any user loggin to the page or not 
 import base64
@@ -87,8 +87,10 @@ def search(request):
         return render(request,'search.html',context)
 
 #-----------------------------------------------top artist -> their profile  --------------------------------------------
-def profile(request,pk):
+def profile(request,pk)
     url=f"https://api.spotify.com/v1/artists/{pk}"
+
+
     headers = get_auth_header(get_token())
     
     response = requests.get(url, headers=headers)
@@ -151,7 +153,7 @@ def music(request,pk):
 #song _id
 def top_songs():
     #top songs by category
-    url=f"https://api.spotify.com/v1/playlists/37i9dQZF1DXdpQPPZq3F7n/tracks?limit=15"
+    url=f"https://api.spotify.com/v1/playlists/3cEYpjA9oz9GiPac4AsH4n/tracks?limit=15"
 
     headers=get_auth_header(get_token())
     result=requests.get(url,headers=headers)
